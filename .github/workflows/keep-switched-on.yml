@@ -1,0 +1,24 @@
+# GitHub switches off timed runs in a public project after 60 days without
+# any change. This adds an empty change twice a month, so the status page
+# keeps updating.
+name: Keep the timed update switched on
+
+on:
+  schedule:
+    - cron: "17 4 1,15 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  keep-switched-on:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit --allow-empty -m "Keep the timed status page update switched on"
+          git push

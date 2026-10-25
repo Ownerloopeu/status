@@ -1,0 +1,52 @@
+# Updates status.ownerloop.eu every 5 minutes from HetrixTools' checks.
+# GitHub may start a timed run a few minutes late; the page says when it last updated.
+name: Update the status page
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: status-page
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      built: ${{ steps.build.outputs.built }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: node --test
+      - id: build
+        run: node build.mjs
+        env:
+          HETRIXTOOLS_API_KEY: ${{ secrets.HETRIXTOOLS_API_KEY }}
+      - if: steps.build.outputs.built == 'yes'
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    if: needs.build.outputs.built == 'yes'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
