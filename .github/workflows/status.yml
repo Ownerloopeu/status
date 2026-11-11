@@ -51,3 +51,18 @@ jobs:
     steps:
       - id: deploy
         uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+
+  # After every update, also one that didn't publish: is the live page fresh? If
+  # it's over 30 minutes old, this fails and GitHub emails admin@ownerloop.eu.
+  check:
+    needs: [build, deploy]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # GitHub Pages takes a moment to serve a new page.
+      - run: sleep 60
+      - run: node check-fresh.mjs

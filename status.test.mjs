@@ -84,3 +84,15 @@ test("the page's security rule allows exactly its own style and script", () => {
   assert.ok(csp.includes(sha(html.match(/<script>([\s\S]*?)<\/script>/)[1])), "script hash");
   assert.match(html, /Everything is working/);
 });
+
+// check-fresh.mjs: the live page's age, after every update.
+import { staleness, updatedAt } from "./check-fresh.mjs";
+
+test("check-fresh reads the page's own update time and fails when it's over 30 minutes old", () => {
+  const now = new Date("2026-11-11T12:00:00Z");
+  const html = (minutesAgo) => `<script>(function(){var u=${now.getTime() - minutesAgo * 60000},n=1})();</script>`;
+  assert.equal(updatedAt(html(0))?.getTime(), now.getTime());
+  assert.equal(staleness(html(10), now), null);
+  assert.equal(staleness(html(107), now), "The page hasn't updated for 107 minutes.");
+  assert.equal(staleness("<p>nothing</p>", now), "The page doesn't say when it last updated.");
+});
