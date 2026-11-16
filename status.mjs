@@ -346,7 +346,7 @@ ${bars(s.days)}
 </head>
 <body>
 <div class="page">
-<header><img class="logo" src="ownerloop-logo.svg" alt="Ownerloop" width="141" height="28"></header>
+<header><img class="logo" src="ownerloop-logo.svg" alt="Ownerloop" width="146" height="28"></header>
 <main>
 <h1>Ownerloop status</h1>
 <p class="lead">Whether QR codes, owner pages and the brand dashboard are working.</p>
