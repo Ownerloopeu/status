@@ -1,5 +1,5 @@
 // Builds status.ownerloop.eu into the folder site/: reads HetrixTools' checks
-// and writes one page (status.mjs). GitHub runs it every 5 minutes
+// and writes one page (status.mjs). GitHub's timer runs it every few minutes
 // (.github/workflows/status.yml). On a laptop, without a key:
 //   node build.mjs --sample up        (or down, maintenance, new: made-up checks)
 // With HetrixTools' read-only key in the environment as HETRIXTOOLS_API_KEY:
@@ -100,7 +100,7 @@ else {
   } catch (error) {
     // A key problem needs fixing, so the run fails (GitHub emails). Anything else
     // (HetrixTools briefly unreachable) leaves the last page up, and its own warning
-    // shows if that lasts more than 20 minutes.
+    // shows if that lasts more than 45 minutes.
     console.error(error.message);
     if (error instanceof KeyProblem) process.exit(1);
     await setOutput("built", "no");
