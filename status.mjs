@@ -1,7 +1,8 @@
 // The status page's logic, with no network: which services are working,
 // their last 30 days, the problems, and the page itself as one HTML file.
 // build.mjs fetches HetrixTools' checks and calls this; status.test.mjs tests it.
-// The look follows the app's DESIGN.md: IBM Plex Sans, the app's colours and badges.
+// The look follows the app's DESIGN.md (Iris, since 21 November 2026): Inter, the app's violet, ink and greys, its
+// corners, badges and the soft shadow cards rest on. Light only, like every page of Ownerloop's but the dashboard.
 import { createHash } from "node:crypto";
 
 // What the page shows, and which HetrixTools checks (by their name there) decide it.
@@ -230,22 +231,23 @@ function problemItem(p, now) {
 }
 
 const STYLE = `
-@font-face{font-family:"IBM Plex Sans";src:url("ibm-plex-sans-latin-variable.woff2") format("woff2");font-weight:100 700;font-style:normal;font-display:swap}
-:root{--ink:#111827;--ink-2:#374151;--ink-3:#4b5563;--line:#e5e7eb;--line-soft:#eef0f2;--canvas:#f3f4f6;--surface:#fff;--action:#2563eb;--action-press:#1e40af;
+@font-face{font-family:"Inter";src:url("inter-latin-variable.woff2") format("woff2");font-weight:100 900;font-style:normal;font-display:swap}
+:root{--ink:#1a1523;--ink-2:#4a4558;--ink-3:#625d70;--line:#e7e5ec;--line-soft:#f0eef4;--canvas:#f7f6fa;--surface:#fff;--action:#6a3de8;--action-press:#5429c9;
 --positive:#166534;--positive-tint:#f0fdf4;--positive-line:#bbf7d0;--caution:#92400e;--caution-mark:#d97706;--caution-tint:#fffbeb;--caution-line:#fde68a;
---critical:#b91c1c;--critical-mark:#dc2626;--critical-tint:#fef2f2;--critical-line:#fecaca;--neutral:#374151;--neutral-tint:#f3f4f6;--data:#3b82f6;--data-track:#e5e7eb;color-scheme:light}
+--critical:#b91c1c;--critical-mark:#dc2626;--critical-tint:#fef2f2;--critical-line:#fecaca;--neutral:#4a4558;--neutral-tint:#f1eff6;--data:#8b6cf6;--data-track:#ebe8f2;
+--shadow-card:0 0 0 1px rgb(26 21 35/.07),0 1px 2px rgb(26 21 35/.05),0 6px 16px -8px rgb(26 21 35/.1);color-scheme:light}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--canvas);color:var(--ink-2);font:400 15px/22px "IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--canvas);color:var(--ink-2);font:400 15px/22px "Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased}
 p{margin:0}
 a{color:var(--action);text-underline-offset:2px}
 a:hover{color:var(--action-press)}
-a:focus-visible{outline:2px solid var(--action);outline-offset:2px;border-radius:2px}
+a:focus-visible{outline:2px solid var(--action);outline-offset:2px;border-radius:3px}
 .page{max-width:720px;margin:0 auto;padding:32px 16px 48px}
 .logo{display:block;height:28px;width:auto}
-h1{margin:28px 0 4px;color:var(--ink);font-size:24px;line-height:32px;letter-spacing:-.012em;font-weight:600;text-wrap:balance}
+h1{margin:28px 0 4px;color:var(--ink);font-size:24px;line-height:32px;letter-spacing:-.021em;font-weight:600;text-wrap:balance}
 .lead{margin-bottom:24px;color:var(--ink-3)}
-.notice{display:flex;gap:12px;margin-bottom:24px;padding:12px 16px;border:1px solid;border-radius:8px}
+.notice{display:flex;gap:12px;margin-bottom:24px;padding:12px 16px;border:1px solid;border-radius:14px}
 .notice>svg{flex:none;width:18px;height:18px;margin-top:2px}
 .notice .title{font-weight:600}
 .notice .more{margin-top:4px;color:var(--ink-2)}
@@ -254,15 +256,15 @@ h1{margin:28px 0 4px;color:var(--ink);font-size:24px;line-height:32px;letter-spa
 .notice.critical{background:var(--critical-tint);border-color:var(--critical-line);color:var(--critical)}
 .notice.neutral{background:var(--surface);border-color:var(--line);color:var(--ink-2)}
 .notice[hidden]{display:none}
-.panel{margin-bottom:24px;background:var(--surface);border:1px solid var(--line);border-radius:8px}
+.panel{margin-bottom:24px;background:var(--surface);border-radius:14px;box-shadow:var(--shadow-card)}
 .panel-head{padding:16px 20px 12px}
-h2{margin:0;color:var(--ink);font-size:16px;line-height:24px;font-weight:600}
+h2{margin:0;color:var(--ink);font-size:16px;line-height:24px;letter-spacing:-.011em;font-weight:600}
 .caption{margin-top:2px;color:var(--ink-3);font-size:13px;line-height:18px}
 .service{padding:16px 20px 20px;border-top:1px solid var(--line-soft)}
 .service-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
 .name{color:var(--ink);font-weight:600}
 .address{color:var(--ink-3);font-size:13px;line-height:18px}
-.tag{display:inline-flex;flex:none;align-items:center;gap:4px;height:22px;padding:0 8px 0 6px;border-radius:4px;font-size:13px;line-height:18px;font-weight:500;white-space:nowrap}
+.tag{display:inline-flex;flex:none;align-items:center;gap:4px;height:22px;padding:0 8px 0 6px;border-radius:6px;font-size:13px;line-height:18px;font-weight:500;white-space:nowrap}
 .tag svg{width:12px;height:12px;flex:none}
 .tag.positive{background:var(--positive-tint);color:var(--positive)}
 .tag.critical{background:var(--critical-tint);color:var(--critical)}
@@ -273,17 +275,17 @@ h2{margin:0;color:var(--ink);font-size:16px;line-height:24px;font-weight:600}
 .bars .some{background:var(--caution-mark)}
 .bars .bad{background:var(--critical-mark)}
 .bars .none{background:var(--data-track)}
-.bars-foot{display:flex;justify-content:space-between;gap:8px;margin-top:6px;color:var(--ink-3);font-size:13px;line-height:18px}
+.bars-foot{display:flex;justify-content:space-between;gap:8px;margin-top:6px;color:var(--ink-3);font-size:13px;line-height:18px;font-variant-numeric:tabular-nums}
 .bars-foot .mid{color:var(--ink-2);font-weight:500}
 .legend{display:flex;flex-wrap:wrap;gap:4px 16px;margin:0;padding:12px 20px 16px;border-top:1px solid var(--line-soft);list-style:none;color:var(--ink-3);font-size:13px;line-height:18px}
 .legend li{display:flex;align-items:center;gap:6px}
 .legend i{display:block;width:10px;height:10px;border-radius:2px;background:var(--data)}
 .legend .some{background:var(--caution-mark)}
 .legend .bad{background:var(--critical-mark)}
-.legend .none{background:var(--data-track);box-shadow:inset 0 0 0 1px #d1d5db}
+.legend .none{background:var(--data-track);box-shadow:inset 0 0 0 1px #d2cfda}
 .problems{margin:0;padding:0 20px 8px;list-style:none}
 .problems li{padding:12px 0;border-top:1px solid var(--line-soft)}
-.when{color:var(--ink);font-weight:500}
+.when{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums}
 .when span{color:var(--ink-3);font-weight:400}
 .empty{padding:0 20px 16px;color:var(--ink-3)}
 footer{color:var(--ink-3);font-size:13px;line-height:18px}
@@ -342,7 +344,7 @@ ${bars(s.days)}
 <meta name="description" content="Whether Ownerloop's QR codes, owner pages and brand dashboard are working.">
 <link rel="icon" href="favicon.ico">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="preload" href="ibm-plex-sans-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="inter-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
 <style>${STYLE}</style>
 </head>
 <body>

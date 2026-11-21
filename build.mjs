@@ -7,7 +7,7 @@
 import { appendFile, copyFile, mkdir, writeFile } from "node:fs/promises";
 import { DAYS, SERVICES, danishOffset, lastDays, renderPage } from "./status.mjs";
 
-const ASSETS = ["ibm-plex-sans-latin-variable.woff2", "ownerloop-logo.svg", "favicon.ico", "apple-touch-icon.png"];
+const ASSETS = ["inter-latin-variable.woff2", "ownerloop-logo.svg", "favicon.ico", "apple-touch-icon.png"];
 const API = "https://api.hetrixtools.com/v3";
 
 class KeyProblem extends Error {}

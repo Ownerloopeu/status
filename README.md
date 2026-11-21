@@ -9,7 +9,7 @@ How it works:
 - **After every update**, a last step (`check-fresh.mjs`) opens the live page and fails if it is more than 30 minutes old, so GitHub emails admin@ownerloop.eu. The app also checks it every night and raises an error in Sentry when it is more than an hour old (in case the updates stop altogether).
 - GitHub switches off timed runs in a public project after 60 days without changes, so `.github/workflows/keep-switched-on.yml` adds an empty change on the 1st and 15th of each month.
 
-The page holds no personal data, sets no cookies and loads nothing from other sites. Its look follows the app's DESIGN.md (IBM Plex Sans, the app's colours and badges).
+The page holds no personal data, sets no cookies and loads nothing from other sites. Its look follows the app's DESIGN.md (Iris: Inter, the app's violet, greys, corners and badges; light only).
 
 On a laptop:
 
@@ -23,7 +23,7 @@ The samples are `up`, `down`, `maintenance` and `new`. The preview opens on http
 
 The services and the HetrixTools checks behind them are listed at the top of `status.mjs`. A check renamed at HetrixTools shows as "Not checked" until its name is changed there too.
 
-IBM Plex Sans: SIL Open Font License (`assets/IBM-Plex-Sans-LICENSE.txt`). Icons: Lucide (ISC licence).
+Inter: SIL Open Font License (`assets/Inter-LICENSE.txt`). Icons: Lucide (ISC licence).
 
 ## When the page stands still
 
