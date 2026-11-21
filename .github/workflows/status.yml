@@ -1,11 +1,13 @@
-# Updates status.ownerloop.eu from HetrixTools' checks, on GitHub's own timer: every 5
-# minutes asked, though GitHub often starts it later (since 20 November 2026; before, an
-# outside service, cron-job.org, started it). The page says when it last updated.
+# Updates status.ownerloop.eu from HetrixTools' checks. cron-job.org starts it every
+# 5 minutes (workflow_dispatch, see the README). GitHub's own timer is only a backup and
+# can't be relied on: asked for every 30 minutes, it started a run every 5 to 9 hours in
+# November 2026, so without cron-job.org the page stands still (tried on 21 November 2026).
+# The page says when it last updated.
 name: Update the status page
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "*/30 * * * *"
   push:
     branches: [main]
   workflow_dispatch:

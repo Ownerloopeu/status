@@ -17,8 +17,7 @@ export const SERVICES = [
 
 export const DAYS = 30;
 export const TIME_ZONE = "Europe/Copenhagen";
-// GitHub's timer is asked for every 5 minutes but can start a run much later, so the warning waits longer.
-export const STALE_AFTER_MINUTES = 45;
+export const STALE_AFTER_MINUTES = 20;
 // A day with less than this much uptime is red rather than amber (99% of a day is about 15 minutes).
 const BAD_DAY_BELOW = 99;
 
@@ -366,7 +365,7 @@ ${problemList}
 </section>
 </main>
 <footer>
-<p>Each service is checked every minute from Frankfurt, Amsterdam, London and New York. This page updates every few minutes. Times are Danish time.</p>
+<p>Each service is checked every minute from Frankfurt, Amsterdam, London and New York. This page updates about every 5 minutes. Times are Danish time.</p>
 <p>Questions: <a href="mailto:support@ownerloop.eu">support@ownerloop.eu</a> · <a href="https://ownerloop.eu">ownerloop.eu</a></p>
 </footer>
 </div>
